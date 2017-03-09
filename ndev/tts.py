@@ -463,12 +463,13 @@ class TTS(object):
 			tts_req.voice = desired_tts_lang['properties']['voice']
 
 		tts_req.synthesize_to_file(filename, text) # unicode text
-
+			
+		'''
 		if tts_req.response.was_successful():
 			print (green("✓ TTS",bold=True))
 		else:
 			print (red("× TTS",bold=True))
-
+		'''
 		return tts_req
 
 	"""
