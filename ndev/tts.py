@@ -571,23 +571,23 @@ class TTSRequest(NDEVRequest):
 	Synthesizes the given text to a file. Wants/Expects `text` to be unicode.
 	"""
 	def synthesize_to_file(self, outname, text):
-		print ("* synthesizing text...")
+		# print ("* synthesizing text...")
 		start_time = time.time()
 		text_to_synth = text.encode('utf-8') # unicode -> utf8
 		url = self.build_url()
 		hdrs = self.get_headers()
-		print ("")
-		print (" Request URL")
-		print (" --------------- ")
-		print (" %s" % url)
-		print (" ")
-		print (" Request Headers ")
-		print (" --------------- ")
-		print (" Content-Type:\t%s" % hdrs['Content-Type'])
-		print (" Accept:\t%s" % hdrs['Accept'])
-		print (" ")
+		# print ("")
+		# print (" Request URL")
+		# print (" --------------- ")
+		# print (" %s" % url)
+		# print (" ")
+		# print (" Request Headers ")
+		# print (" --------------- ")
+		# print (" Content-Type:\t%s" % hdrs['Content-Type'])
+		# print (" Accept:\t%s" % hdrs['Accept'])
+		# print (" ")
 		response = requests.post(url, data=text_to_synth, headers=hdrs)
-		print (" Making request: %f seconds, %i bytes" % ((time.time() - start_time),len(response.content)))
+		# print (" Making request: %f seconds, %i bytes" % ((time.time() - start_time),len(response.content)))
 		ret = TTSResponse(response)
 		if ret.was_successful():
 			if self.audioType == 'wav':
@@ -601,6 +601,6 @@ class TTSRequest(NDEVRequest):
 				f = open(outname, 'wb')
 				f.write(response.content)
 				f.close()
-		print ("\n* synthesize request complete\n")
+		# print ("\n* synthesize request complete\n")
 		self.response = ret
 		return ret
