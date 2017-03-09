@@ -474,7 +474,7 @@ class TTS(object):
 
 	@staticmethod
 	def make_request_data(creds=None, desired_tts_lang=None, text=None,
-					 filename=None, sample_rate=16000, nchannels=1,
+					 sample_rate=16000, nchannels=1,
 					 sample_width=2, audio_type='wav'):
 
 		if text is None:
@@ -490,7 +490,7 @@ class TTS(object):
 			tts_req.voice = desired_tts_lang['properties']['voice']
 
 		#tts_req.synthesize_to_file(filename, text) # unicode text
-		data = tts_req.synthesize_to_data(filename, text) # unicode text
+		data = tts_req.synthesize_to_data(text) # unicode text
 			
 		'''
 		if tts_req.response.was_successful():
@@ -637,7 +637,7 @@ class TTSRequest(NDEVRequest):
 	"""
 	Synthesizes the given text and returns audio data. Wants/Expects `text` to be unicode.
 	"""
-	def synthesize_to_data(self, outname, text):
+	def synthesize_to_data(self, text):
 		# print ("* synthesizing text...")
 		start_time = time.time()
 		text_to_synth = text.encode('utf-8') # unicode -> utf8
