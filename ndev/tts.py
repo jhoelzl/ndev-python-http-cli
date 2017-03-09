@@ -472,6 +472,34 @@ class TTS(object):
 		'''
 		return tts_req
 
+	@staticmethod
+	def make_request_data(creds=None, desired_tts_lang=None, text=None,
+					 filename=None, sample_rate=16000, nchannels=1,
+					 sample_width=2, audio_type='wav'):
+
+		if text is None:
+			return None
+			
+		tts_req = TTSRequest(desired_tts_lang, credentials=creds)
+		tts_req.sample_rate = sample_rate
+		tts_req.nchannels = nchannels
+		tts_req.sample_width = sample_width
+		tts_req.audioType = audio_type
+		
+		if desired_tts_lang is not None:
+			tts_req.voice = desired_tts_lang['properties']['voice']
+
+		#tts_req.synthesize_to_file(filename, text) # unicode text
+		data = tts_req.synthesize_to_data(filename, text) # unicode text
+			
+		'''
+		if tts_req.response.was_successful():
+			print (green("✓ TTS",bold=True))
+		else:
+			print (red("× TTS",bold=True))
+		'''
+		return data
+
 	"""
 	Pass in a language code to try to match. 
 	If it doesn't exist, will ask user for it.
@@ -605,3 +633,41 @@ class TTSRequest(NDEVRequest):
 		# print ("\n* synthesize request complete\n")
 		self.response = ret
 		return ret
+
+	"""
+	Synthesizes the given text and returns audio data. Wants/Expects `text` to be unicode.
+	"""
+	def synthesize_to_data(self, outname, text):
+		# print ("* synthesizing text...")
+		start_time = time.time()
+		text_to_synth = text.encode('utf-8') # unicode -> utf8
+		url = self.build_url()
+		hdrs = self.get_headers()
+		# print ("")
+		# print (" Request URL")
+		# print (" --------------- ")
+		# print (" %s" % url)
+		# print (" ")
+		# print (" Request Headers ")
+		# print (" --------------- ")
+		# print (" Content-Type:\t%s" % hdrs['Content-Type'])
+		# print (" Accept:\t%s" % hdrs['Accept'])
+		# print (" ")
+		response = requests.post(url, data=text_to_synth, headers=hdrs)
+		# print (" Making request: %f seconds, %i bytes" % ((time.time() - start_time),len(response.content)))
+		ret = TTSResponse(response)
+		# if ret.was_successful():
+		#	if self.audioType == 'wav':
+		#		fo = wave.open(outname, 'wb')
+		#		fo.setframerate(self.sample_rate)
+		#		fo.setnchannels(self.nchannels)
+		#		fo.setsampwidth(self.sample_width)
+		#		fo.writeframes(response.content)
+		#		fo.close()
+		#	else:
+		#		f = open(outname, 'wb')
+		#		f.write(response.content)
+		#		f.close()
+		# print ("\n* synthesize request complete\n")
+		self.response = ret
+		return response.content
