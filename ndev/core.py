@@ -57,8 +57,8 @@ class UserInput(object):
 				if times_asked < threshold:
 					num_left = threshold-times_asked
 					suf = "s" if num_left is not 1 else ""
-					print red("   Please supply an input of %s. %i more attempt%s before selecting default." % (str(self.input_type), num_left, suf))
-		print yellow("   Using default value. Option [%s]" % self.default_value)
+					print (red("   Please supply an input of %s. %i more attempt%s before selecting default." % (str(self.input_type), num_left, suf)))
+		print (yellow("   Using default value. Option [%s]" % self.default_value))
 		return self.default_value
 		
 	def get_user_input(self):
@@ -168,12 +168,12 @@ class NDEVRequest(object):
 Input method for languages
 """
 def _get_language_input(type, data, default): # type = 'Recognition', 'Synthesis', o = ASR, TTS
-	print "Select %s Language\n" % type
+	print ("Select %s Language\n" % type)
 	i = 0 
 	languages = list(data.Languages)
 	languages.sort()
 	for lang in languages:
-		print " [%i]\t%-25s %s" % (i, lang, data.Languages[lang]['code'])
+		print (" [%i]\t%-25s %s" % (i, lang, data.Languages[lang]['code']))
 		i += 1
 	selection = raw_input("\nWhich language (default: %s)? " % default)
 	lang = languages[int(selection)] if len(selection) > 0 else None

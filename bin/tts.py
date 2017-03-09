@@ -15,8 +15,7 @@ parser.add_option("-l", "--lang", action="store", type="string", dest="language"
 parser.add_option("-r", "--rate", action="store", type="int", dest="samplerate",
                   help="the sample rate to use for the create audio file if relevant, i.e. 16000")
 parser.add_option("-v", "--voice", action="store", type="string", dest="voice",
-                  help="the voice name for the language, i.e. Steffi, Anna")
-(options, args) = parser.parse_args()                  
+                  help="the voice name for the language, i.e. Steffi, Anna")               
 (options, args) = parser.parse_args()
 
 if __name__ == "__main__":

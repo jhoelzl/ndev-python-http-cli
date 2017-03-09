@@ -465,9 +465,9 @@ class TTS(object):
 		tts_req.synthesize_to_file(filename, text) # unicode text
 
 		if tts_req.response.was_successful():
-			print green("✓ TTS",bold=True)
+			print (green("✓ TTS",bold=True))
 		else:
-			print red("× TTS",bold=True)
+			print (red("× TTS",bold=True))
 
 		return tts_req
 
@@ -476,7 +476,7 @@ class TTS(object):
 	If it doesn't exist, will ask user for it.
 	"""
 	@staticmethod
-	def get_language_input(language_code=None):
+	def get_language_input(language_code=None,voice=None):
 		ret = None
 		if language_code is not None:
 			for (k,v) in list(TTS.Languages.items()):
@@ -485,19 +485,22 @@ class TTS(object):
 		if ret is None:
 			lang = _get_language_input('Synthesis', TTS, default="US English")
 			ret = (lang['display'],lang['properties'])
-			print " "
-		if len(ret[1]['voice']) > 1:
-			print "The following voices are available in %s..\n" % ret[1]['code']
-			i = 0
-			for voice in ret[1]['voice']:
-				print " [%i]  %s (%s)" % (i, voice, ret[1]['gender'][i])
-				i += 1
-			selection = raw_input("\nWhich voice would you like to use? ")
-			if selection is None or selection.strip() == '':
-				selection = "0"
-			ret = (ret[0], ret[1], ret[1]['voice'][int(selection.strip())])
+			print (" ")
+		if voice is None:	
+			if len(ret[1]['voice']) > 1:
+				print ("The following voices are available in %s..\n" % ret[1]['code'])
+				i = 0
+				for voice in ret[1]['voice']:
+					print (" [%i]  %s (%s)" % (i, voice, ret[1]['gender'][i]))
+					i += 1
+				selection = raw_input("\nWhich voice would you like to use? ")
+				if selection is None or selection.strip() == '':
+					selection = "0"
+				ret = (ret[0], ret[1], ret[1]['voice'][int(selection.strip())])
+			else:
+				ret = (ret[0], ret[1], ret[1]['voice'][0])
 		else:
-			ret = (ret[0], ret[1], ret[1]['voice'][0])
+			ret = (ret[0], ret[1], voice)		
 		ret = {
 			'display': ret[0],
 			'properties': {
@@ -568,23 +571,23 @@ class TTSRequest(NDEVRequest):
 	Synthesizes the given text to a file. Wants/Expects `text` to be unicode.
 	"""
 	def synthesize_to_file(self, outname, text):
-		print "* synthesizing text..."
+		print ("* synthesizing text...")
 		start_time = time.time()
 		text_to_synth = text.encode('utf-8') # unicode -> utf8
 		url = self.build_url()
 		hdrs = self.get_headers()
-		print ""
-		print " Request URL"
-		print " --------------- "
-		print " %s" % url
-		print " "
-		print " Request Headers "
-		print " --------------- "
-		print " Content-Type:\t%s" % hdrs['Content-Type']
-		print " Accept:\t%s" % hdrs['Accept']
-		print " "
+		print ("")
+		print (" Request URL")
+		print (" --------------- ")
+		print (" %s" % url)
+		print (" ")
+		print (" Request Headers ")
+		print (" --------------- ")
+		print (" Content-Type:\t%s" % hdrs['Content-Type'])
+		print (" Accept:\t%s" % hdrs['Accept'])
+		print (" ")
 		response = requests.post(url, data=text_to_synth, headers=hdrs)
-		print " Making request: %f seconds, %i bytes" % ((time.time() - start_time),len(response.content))
+		print (" Making request: %f seconds, %i bytes" % ((time.time() - start_time),len(response.content)))
 		ret = TTSResponse(response)
 		if ret.was_successful():
 			if self.audioType == 'wav':
@@ -598,6 +601,6 @@ class TTSRequest(NDEVRequest):
 				f = open(outname, 'wb')
 				f.write(response.content)
 				f.close()
-		print "\n* synthesize request complete\n"
+		print ("\n* synthesize request complete\n")
 		self.response = ret
 		return ret
