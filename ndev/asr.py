@@ -347,7 +347,7 @@ class ASR(object):
 	def __read_wav_file_in_chunks(filepath):
 		file_to_play = wave.open(filepath, 'rb')
 		total_size = os.path.getsize(filepath) - 44 # 44 = wave header size
-		print "  Audio File          %s" % filepath
+		print ("  Audio File          %s" % filepath)
 		data = file_to_play.readframes(ASR.chunk_size)
 		total_chunks = 0
 		while data != '':
@@ -366,7 +366,7 @@ class ASR(object):
 	def __read_file_in_chunks(filepath):
 		file_to_play = open(filepath, 'rb')
 		total_size = os.path.getsize(filepath) 
-		print "  Audio File         %s" % filepath
+		print ("  Audio File         %s" % filepath)
 		data = file_to_play.read(ASR.chunk_size)
 		total_chunks = 0
 		while data != '':
@@ -394,15 +394,15 @@ class ASR(object):
 			analyze_function = ASR.__read_file_in_chunks
 		
 		if analyze_function is None:
-			print "Don't know how to stream this file... %s" % filename
+			print ("Don't know how to stream this file... %s" % filename)
 			sys.exit(-1)
 			
 		result = aReq.analyze(analyze_function)
 
 		if result.was_successful():
-			print green("✓ ASR",bold=True)
+			print (green("✓ ASR",bold=True))
 		else:
-			print red("× ASR",bold=True)
+			print (red("× ASR",bold=True))
 
 		return aReq
 	
@@ -502,33 +502,33 @@ class ChunkedASRRequest(NDEVRequest):
 	def analyze(self, readstream):
 		hdrs = self.get_headers()
 		url = self.build_url()
-		print "* analyzing audio stream..."
-		print ""
-		print "  Request URL         %s%s" % (self.url,self.path)
-		print ""
-		print "  Request Params"
-		print "  ---------------"
-		print "  appId               %s" % self.app_id
-		print "  appKey              %s" % self.app_key
-		print "  id                  %s" % self.requestor_id
-		print ""
-		print "  Request Headers "
-		print "  --------------- "
-		print "  Content-Type        %s" % hdrs[u'Content-Type']
-		print "  Transfer-Encoding   %s" % hdrs['Transfer-Encoding']
-		print "  Accept              %s" % hdrs['Accept']
-		print "  Accept-Topic        %s" % hdrs['Accept-Topic']
-		print "  Accept-Language     %s" % hdrs['Accept-Language']
-		print ""
-		print "  Audio Information "
-		print "  ----------------- "
-		print "  Sample Width        %d" % self.sample_width
-		print "  Sample Rate         %d" % self.sample_rate
-		print "  Num Channels        %d" % self.nchannels
-		print "  Bit Rate            %d" % self.bit_rate
-		print " "
+		print ("* analyzing audio stream...")
+		print ("")
+		print ("  Request URL         %s%s" % (self.url,self.path))
+		print ("")
+		print ("  Request Params")
+		print ("  ---------------")
+		print ("  appId               %s" % self.app_id)
+		print ("  appKey              %s" % self.app_key)
+		print ("  id                  %s" % self.requestor_id)
+		print ("")
+		print ("  Request Headers ")
+		print ("  --------------- ")
+		print ("  Content-Type        %s" % hdrs[u'Content-Type'])
+		print ("  Transfer-Encoding   %s" % hdrs['Transfer-Encoding'])
+		print ("  Accept              %s" % hdrs['Accept'])
+		print ("  Accept-Topic        %s" % hdrs['Accept-Topic'])
+		print ("  Accept-Language     %s" % hdrs['Accept-Language'])
+		print ("")
+		print ("  Audio Information ")
+		print ("  ----------------- ")
+		print ("  Sample Width        %d" % self.sample_width)
+		print ("  Sample Rate         %d" % self.sample_rate)
+		print ("  Num Channels        %d" % self.nchannels)
+		print ("  Bit Rate            %d" % self.bit_rate)
+		print (" ")
 		res = requests.post(url, data=readstream(self.filename), headers=hdrs)
-		print "* analyzed stream.\n"
+		print ("* analyzed stream.\n")
 		self.response = ASRResponse(res)
 		return self.response
 
