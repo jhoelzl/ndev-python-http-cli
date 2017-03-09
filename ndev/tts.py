@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, sys, wave, requests, time
-from core import NDEVRequest, NDEVResponse, _get_language_input, red, green
+from ndev.core import NDEVRequest, NDEVResponse, _get_language_input, red, green
 
 """
 Constants as per the NDEV HTTP spec for TTS
