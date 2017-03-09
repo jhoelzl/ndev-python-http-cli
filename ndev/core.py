@@ -91,7 +91,7 @@ class NDEVCredentials(object):
 		
 	def _load_credentials(self, credentials_path):
 		p = credentials_path if credentials_path is not None else NDEVCredentials.PATH
-		f = open(p, 'rb')
+		f = open(p, 'r')
 		j = json.loads(f.read())
 		self.app_id = j['appId']
 		self.app_key = j['appKey']
