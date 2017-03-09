@@ -3,7 +3,7 @@
 
 import os, sys, wave, requests, time
 from sys import stdout
-from core import NDEVRequest, NDEVResponse, _get_language_input, red, green
+from ndev.core import NDEVRequest, NDEVResponse, _get_language_input, red, green
 from time import sleep
 
 class ASR(object):
