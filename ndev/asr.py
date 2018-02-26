@@ -350,7 +350,7 @@ class ASR(object):
 		print "  Audio File          %s" % filepath
 		data = file_to_play.readframes(ASR.chunk_size)
 		total_chunks = 0
-		while 100*total_chunks/total_size != 100:
+		while data != b'':
 			total_chunks += len(data)
 			stdout.write("\r  Bytes Sent          %d/%d \t%d%% " % (total_chunks,total_size,100*total_chunks/total_size))
 			stdout.flush()
